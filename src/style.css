@@ -8,3 +8,7 @@
   --gold: #D4AF37;
   --ivory: #FFF9F0;
 }
+
+.bg-ivory { background-color: var(--ivory); }
+.text-primary { color: var(--primary); }
+.border-primary { border-color: var(--primary); }
