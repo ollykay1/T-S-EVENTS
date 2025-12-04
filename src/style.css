@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom colors */
+:root {
+  --primary: #0B3D91;
+  --gold: #D4AF37;
+  --ivory: #FFF9F0;
+}
