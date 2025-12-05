@@ -1,10 +1,9 @@
-import React from "react";
-
 export default function Footer() {
   return (
-    <footer className="bg-primary text-white py-6 mt-10">
-      <div className="container mx-auto text-center">
-        &copy; {new Date().getFullYear()} T&S Events. All rights reserved.
+    <footer className="bg-gold text-black py-2 mt-">
+      <div className="max-w-7xl mx-auto text-center">
+        <p>© 2025 T&S Events. We serve you the best.</p>
+        <p>Email: T&Sevents@gmail.com | Phone: +234 9161329181 | Nigeria</p>
       </div>
     </footer>
   );

@@ -2,13 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom colors */
-:root {
-  --primary: #0B3D91;
-  --gold: #D4AF37;
-  --ivory: #FFF9F0;
+html, body {
+  background-color: #FFF9F4;
+  font-family: 'Poppins', sans-serif;
+  scroll-behavior: smooth;
 }
 
-.bg-ivory { background-color: var(--ivory); }
-.text-primary { color: var(--primary); }
-.border-primary { border-color: var(--primary); }
+section {
+  min-height: 100vh;
+  padding-top: 5rem;
+}
+
+.fade-up {
+  animation: fadeUp 1.2s ease-out;
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-floaty {
+  animation: floaty 2.5s ease-in-out infinite;
+}
+
+@keyframes floaty {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}

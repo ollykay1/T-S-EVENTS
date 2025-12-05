@@ -6,6 +6,7 @@ import Services from "./components/Service";
 import Gallery from "./components/Gallery";
 import Contact from "./components/Contacts";
 import Footer from "./components/Footer";
+import WhatsAppButton from "./components/WhatsAppButton";
 
 function App() {
   const [loadingFinished, setLoadingFinished] = useState(false);
@@ -15,7 +16,7 @@ function App() {
       {!loadingFinished && <Preloader onFinish={() => setLoadingFinished(true)} />}
 
       {loadingFinished && (
-        <div className="min-h-screen bg-ivory">
+        <div className="min-h-screen bg-ivory pt-20">
           <Header />
           <Hero />
           <Services />
