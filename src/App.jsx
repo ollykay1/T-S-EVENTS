@@ -23,6 +23,7 @@ function App() {
           <Gallery />
           <Contact />
           <Footer />
+          <WhatsAppButton />
         </div>
       )}
     </>

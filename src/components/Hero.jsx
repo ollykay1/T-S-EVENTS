@@ -1,8 +1,10 @@
+import React from "react";
+
 export default function Hero() {
   return (
     <section
       id="hero"
-      className="min-h-screen flex flex-col justify-center items-center text-center px-6 relative"
+      className="relative min-h-screen flex items-center justify-center text-center"
       style={{
         backgroundImage: "url('/src/images/hero-bg.jpg')",
         backgroundSize: "cover",
@@ -11,19 +13,30 @@ export default function Hero() {
     >
       <div className="absolute inset-0 bg-black/50"></div>
 
-      <div className="relative z-10 max-w-8xl fade-up">
-        <h2 className="text-5xl md:text-5xl font-display text-gold font-extrabold mb-6 animate-fade-up drop-shadow-lg">
-          Making Every Moment Unforgettable
-        </h2>
-        <p className="text-xl md:text-2xl text-softWhite mb-8 drop-shadow-md">
-          Bespoke events, luxurious decorations, and memorable experiences crafted just for you.
+      <div className="relative z-20 max-w-3xl px-6 fade-up">
+        <h1 className="text-5xl md:text-6xl font-display font-extrabold text-black drop-shadow-lg mb-4">
+          Luxury Experiences <span className="text-black">Within Your Budget</span>
+        </h1>
+
+        <p className="text-lg md:text-xl text-ivory/95 drop-shadow-md mb-8">
+          T&S Elite Events delivers bespoke weddings, corporate galas, and private parties beautifully styled and executed at their budget while ensuring full satisfaction.
         </p>
-        <button
-          onClick={() => document.getElementById("contact").scrollIntoView({ behavior: "smooth" })}
-          className="px-7 py-3 text-white font-semibold bg-black rounded-full hover:bg-white hover:text-black transition"
-        >
-          Book an Event
-        </button>
+
+        <div className="flex items-center justify-center gap-4">
+          <button
+            onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })}
+            className="px-6 py-3 rounded-full bg-gold text-black font-semibold hover:bg-black hover:text-white transition"
+          >
+            Explore Services
+          </button>
+
+          <button
+            onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+            className="px-6 py-3 rounded-full bg-black text-ivory font-semibold hover:bg-gold hover:text-deepNavy transition"
+          >
+            Book an Event
+          </button>
+        </div>
       </div>
     </section>
   );

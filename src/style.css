@@ -2,32 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Colors (Option A) */
+:root{
+  --deepNavy: #1B1F3B;
+  --babyPink: #F4C2D7;
+  --gold: #D4AF37;
+  --hoverGold: #C69F2B;
+  --ivory: #FFF9F4;
+  --rosePink: #E8BFD4;
+  --textDark: #0E1220;
+  --accentBlue: #0B3D91;
+}
+
+/* Base */
 html, body {
-  background-color: #FFF9F4;
+  background-color: var(--ivory);
   font-family: 'Poppins', sans-serif;
+  color: var(--textDark);
   scroll-behavior: smooth;
 }
 
-section {
-  min-height: 100vh;
-  padding-top: 5rem;
+section { min-height: 100vh; padding-top: 5rem; }
+
+/* Hero overlay for contrast on bright images */
+.hero-overlay {
+  background: linear-gradient(180deg, rgba(11,17,35,0.55) 0%, rgba(11,17,35,0.35) 50%, rgba(11,17,35,0.12) 100%);
 }
 
-.fade-up {
-  animation: fadeUp 1.2s ease-out;
-}
+/* Typography helpers */
+.font-display { font-family: 'Cinzel', serif; }
+.font-body { font-family: 'Poppins', sans-serif; }
 
-@keyframes fadeUp {
-  0% { opacity: 0; transform: translateY(30px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
+/* Animations */
+.fade-up { animation: fadeUp 1s ease-out both; }
+@keyframes fadeUp { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
 
-.animate-floaty {
-  animation: floaty 2.5s ease-in-out infinite;
-}
+.scale-in { animation: scaleIn .7s cubic-bezier(.2,.9,.2,1) both; }
+@keyframes scaleIn { from{opacity:0; transform:scale(.98)} to{opacity:1; transform:scale(1)} }
 
-@keyframes floaty {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-  100% { transform: translateY(0); }
+/* Buttons */
+.btn {
+  transition: all .22s ease;
+  border-radius: 999px;
+  font-weight: 600;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
+.btn-gold {
+  background: var(--gold);
+  color: #fff;
+}
+.btn-gold:hover { background: var(--hoverGold); transform: translateY(-3px); }
+
+/* Cards */
+.card-lux { box-shadow: 0 15px 40px rgba(11,29,60,0.12); border-radius: 18px; }
+
+/* Footer */
+.footer-link { color: var(--ivory); }
+.footer-link:hover { color: var(--gold); }
+
+/* small helpers */
+.text-ivory { color: var(--ivory); }
+.text-gold { color: var(--gold); }
+.bg-babyPink { background-color: var(--babyPink); }
+.bg-deepNavy { background-color: var(--deepNavy); }

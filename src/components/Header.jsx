@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+
   const menuItems = [
     { label: "Home", target: "hero" },
     { label: "Services", target: "services" },
@@ -15,34 +16,55 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed w-full top-0 left-0 bg- z-40 shadow-md">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-        <h1 className="text-5xl font-display text-black font-extrabold">T&S Events</h1>
+    <header className="fixed w-full top-0 left-0 z-50 bg-deepNavy/95 backdrop-blur">
+      <div className="max-w-7xl mx-auto flex items-center px-6 py-4">
+        {/* Logo */}
+        <div
+          onClick={() => scrollTo("hero")}
+          className="flex items-center gap-3 cursor-pointer"
+        >
+          <div className="w-12 h-12 bg-gold text-deepNavy font-bold flex items-center justify-center rounded-md">
+            T&S
+          </div>
+          <div>
+            <div className="text-2xl font-display text-gold font-extrabold">
+              T&S ELITE EVENTS
+            </div>
+            <div className="text-xs text-babyPink/80">
+              Bespoke & Luxurious
+            </div>
+          </div>
+        </div>
 
-        <nav className="hidden md:flex gap-8 font-display text-babyPink font-semibold">
+        {/* RIGHT aligned nav */}
+        <nav className="hidden md:flex gap-8 ml-auto">
           {menuItems.map((item) => (
             <button
               key={item.target}
               onClick={() => scrollTo(item.target)}
-              className="hover:text-gold transition-colors duration-300"
+              className="text-babyPink text-lg font-display font-semibold hover:text-gold transition"
             >
               {item.label}
             </button>
           ))}
         </nav>
 
-        <button className="md:hidden text-babyPink text-3xl" onClick={() => setOpen(!open)}>
+        {/* Mobile toggle */}
+        <button
+          className="md:hidden ml-auto text-babyPink text-3xl"
+          onClick={() => setOpen(!open)}
+        >
           {open ? "✕" : "☰"}
         </button>
       </div>
 
       {open && (
-        <div className="md:hidden bg-deepNavy px-6 py-4 flex flex-col gap-4 animate-fade-up">
+        <div className="md:hidden bg-deepNavy px-6 pb-6">
           {menuItems.map((item) => (
             <button
               key={item.target}
               onClick={() => scrollTo(item.target)}
-              className="py-2 text-left text-babyPink hover:text-gold transition-colors duration-300 font-display font-semibold"
+              className="block w-full text-left py-3 text-babyPink font-semibold hover:text-gold transition"
             >
               {item.label}
             </button>
