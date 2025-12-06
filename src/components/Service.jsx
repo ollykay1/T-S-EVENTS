@@ -107,7 +107,7 @@ We assign trained staff, brief them on the event flow, manage seating, assist VI
             <p className="text-textDark/80 text-sm">{s.brief}</p>
             <button
               onClick={() => setActive(s)}
-              className="mt-4 inline-block px-3 py-1 text-sm font-semibold rounded-full border border-deepNavy/30 hover:bg-deepNavy hover:text-ivory transition"
+              className="mt-4 inline-block px-3 py-1 text-sm font-semibold bg-gold rounded-full border border-white/90 hover:bg-gold/60 hover:text-ivory transition"
             >
               More
             </button>

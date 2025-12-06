@@ -41,12 +41,17 @@ export default function Contact() {
             placeholder="Email address"
           />
 
-          {/* Date — light until focused */}
-          <input
-            name="date"
-            type="date"
-            className="p-4 rounded-lg border border-rosePink/40 text-gray-400 focus:text-deepNavy focus:font-medium focus:outline-none focus:border-gold"
-          />
+         <input
+  name="date"
+  type="text"
+  placeholder="Event date"
+  onFocus={(e) => (e.target.type = "date")}
+  onBlur={(e) => {
+    if (!e.target.value) e.target.type = "text";
+  }}
+  className="p-4 rounded-lg border border-rosePink/40 text-gray-400 focus:text-deepNavy focus:font-medium focus:outline-none focus:border-gold"
+/>
+
 
           {/* Event type — light until focused */}
           <select
@@ -75,7 +80,7 @@ export default function Contact() {
             <option>Religious Ceremony</option>
             <option>Cultural Event</option>
             <option>Outdoor Event</option>
-            <option>Virtual Event</option>
+            <option>House Warming</option>
             <option>Hybrid Event</option>
             <option>Team Building</option>
             <option>Award Ceremony</option>

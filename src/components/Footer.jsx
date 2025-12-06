@@ -39,7 +39,7 @@ export default function Footer() {
 
           {/* Instagram */}
           <a
-            href="#@ts_elite_events"
+            href="@ts_elite_events"
             aria-label="Instagram"
             className="w-7 h-7 rounded-full bg-ivory/10 flex items-center justify-center hover:bg-gold transition"
           >
@@ -80,19 +80,21 @@ export default function Footer() {
           </a>
 
          
-          {/* Email */}
-          <a
-            href="oluwatosinruth111@gmail.com"
-            aria-label="Email"
-            className="w-7 h-7 rounded-full bg-ivory/10 flex items-center justify-center hover:bg-gold transition"
-          >
-            <svg
-              className="w-4 h-4 fill-current text-ivory hover:text-deepNavy"
-              viewBox="0 0 24 24"
-            >
-              <path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 .5v.26l8 5.07l8-5.07V6.5l-8 5.1l-8-5.1Zm0 2.24V18h16V8.74l-7.47 4.74a1 1 0 0 1-1.06 0L4 8.74Z" />
-            </svg>
-          </a>
+         {/* Email */}
+<a
+    href="https://mail.google.com/mail/?view=cm&fs=1&to=oluwatosinruth111@gmail.com&su=Event%20Inquiry&body=Hi%20T&S%20Elite%20Events,"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Email"
+  className="w-7 h-7 rounded-full bg-ivory/10 flex items-center justify-center hover:bg-gold transition"
+>
+  <svg
+    className="w-4 h-4 fill-current text-ivory hover:text-deepNavy"
+    viewBox="0 0 24 24"
+  >
+    <path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 .5v.26l8 5.07l8-5.07V6.5l-8 5.1l-8-5.1Zm0 2.24V18h16V8.74l-7.47 4.74a1 1 0 0 1-1.06 0L4 8.74Z" />
+  </svg>
+</a>
         </div>
       </div>
 

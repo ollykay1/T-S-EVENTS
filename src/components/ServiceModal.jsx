@@ -17,7 +17,7 @@ export default function ServiceModal({ service, onClose }) {
     <div className="fixed inset-0 z-50 flex items-start md:items-center justify-center p-4 bg-black/20 animate-fade-in">
       <div
         ref={modalRef}
-        className="w-full max-w-xs md:max-w-sm bg-softWhite rounded-2xl p-6 shadow-lg transform scale-95 hover:scale-100 transition-all duration-300"
+        className="w-full max-w-xs md:max-w-sm bg-gray-300 rounded-2xl p-6 shadow-lg transform scale-95 hover:scale-100 transition-all duration-300"
       >
         <div className="flex justify-between items-start gap-3">
           <div>
