@@ -1,13 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import emailjs from "@emailjs/browser";
 
 export default function Contact() {
   const [sent, setSent] = useState(false);
+  const formRef = useRef(null);
+  const startTimeRef = useRef(Date.now());
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSent(true);
-    e.currentTarget.reset();
-    setTimeout(() => setSent(false), 2500);
+
+    const form = formRef.current;
+
+    // Honeypot: check invisible field
+    const honeypot = form["website"]?.value;
+    if (honeypot) return; // silently block spam
+
+    // Time-based protection: at least 2 seconds
+    if (Date.now() - startTimeRef.current < 2000) return;
+
+    // Send form via EmailJS
+    emailjs
+      .sendForm(
+        "service_2caqcvc",
+        "template_iw56c3z",
+        form,
+        "7h1brFQKRSL5qlR-Y"
+      )
+      .then(
+        (result) => {
+          console.log("Email successfully sent:", result.text);
+          setSent(true);
+          form.reset();
+          startTimeRef.current = Date.now(); // reset timer
+          setTimeout(() => setSent(false), 2500);
+        },
+        (error) => {
+          console.error("EmailJS error:", error);
+          alert(
+            "Oops — something went wrong. Check console for details or your EmailJS setup."
+          );
+        }
+      );
   };
 
   return (
@@ -17,8 +50,12 @@ export default function Contact() {
       </h2>
 
       <div className="max-w-xl mx-auto bg-babyPink p-10 rounded-2xl shadow-lg border border-rosePink/30">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-6">
           
+          {/* Honeypot field */}
+          <input type="text" name="website" autoComplete="off" style={{ display: "none" }} />
+
+          {/* Name */}
           <input
             name="name"
             required
@@ -26,6 +63,7 @@ export default function Contact() {
             placeholder="Full name"
           />
 
+          {/* Phone */}
           <input
             name="phone"
             type="tel"
@@ -33,6 +71,7 @@ export default function Contact() {
             placeholder="Phone number"
           />
 
+          {/* Email */}
           <input
             name="email"
             type="email"
@@ -41,27 +80,23 @@ export default function Contact() {
             placeholder="Email address"
           />
 
-         <input
-  name="date"
-  type="text"
-  placeholder="Event date"
-  onFocus={(e) => (e.target.type = "date")}
-  onBlur={(e) => {
-    if (!e.target.value) e.target.type = "text";
-  }}
-  className="p-4 rounded-lg border border-rosePink/40 text-gray-400 focus:text-deepNavy focus:font-medium focus:outline-none focus:border-gold"
-/>
+          {/* Date */}
+          <input
+            name="date"
+            type="text"
+            placeholder="Event date"
+            onFocus={(e) => (e.target.type = "date")}
+            onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
+            className="p-4 rounded-lg border border-rosePink/40 text-gray-400 focus:text-deepNavy focus:font-medium focus:outline-none focus:border-gold"
+          />
 
-
-          {/* Event type — light until focused */}
+          {/* Event type */}
           <select
             name="type"
             className="p-4 rounded-lg border border-rosePink/40 text-gray-400 focus:text-deepNavy focus:font-medium focus:outline-none focus:border-gold"
             defaultValue=""
           >
-            <option value="" disabled>
-              Select event type
-            </option>
+            <option value="" disabled>Select event type</option>
             <option>Wedding</option>
             <option>Birthday</option>
             <option>Corporate</option>
@@ -91,6 +126,7 @@ export default function Contact() {
             <option>Other</option>
           </select>
 
+          {/* Message */}
           <textarea
             name="message"
             required
@@ -98,7 +134,7 @@ export default function Contact() {
             placeholder="Tell us about your vision"
           />
 
-          {/* Actions */}
+          {/* Submit */}
           <div>
             <button
               type="submit"
