@@ -82,7 +82,7 @@ export default function Footer() {
          
          {/* Email */}
 <a
-    href="https://mail.google.com/mail/?view=cm&fs=1&to=oluwatosinruth111@gmail.com&su=Event%20Inquiry&body=Hi%20T&S%20Elite%20Events,"
+    href="mailto:oluwatosinruth111@gmail.com?subject=Event%20Inquiry&body=Hi%20T&S%20Elite%20Events,"
   target="_blank"
   rel="noopener noreferrer"
   aria-label="Email"
