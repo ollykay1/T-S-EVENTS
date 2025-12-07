@@ -11,7 +11,7 @@ export default function Hero() {
         backgroundPosition: "center",
       }}
     >
-      <div className="absolute inset-0 bg-black/50"></div>
+      <div className="absolute inset-0 bg-black/20"></div>
 
       <div className="relative z-20 max-w-3xl px-6 fade-up">
         <h1 className="text-5xl md:text-6xl font-display font-extrabold text-black drop-shadow-lg mb-4">

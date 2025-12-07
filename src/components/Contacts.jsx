@@ -1,46 +1,44 @@
 import React, { useState, useRef } from "react";
-import emailjs from "@emailjs/browser";
+import { db } from "../firebase";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 export default function Contact() {
   const [sent, setSent] = useState(false);
+  const [eventSelected, setEventSelected] = useState(false);
   const formRef = useRef(null);
   const startTimeRef = useRef(Date.now());
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const form = formRef.current;
 
-    // Honeypot: check invisible field
-    const honeypot = form["website"]?.value;
-    if (honeypot) return; // silently block spam
+    // Honeypot
+    if (form.website?.value) return;
 
-    // Time-based protection: at least 2 seconds
+    // Time-based check
     if (Date.now() - startTimeRef.current < 2000) return;
 
-    // Send form via EmailJS
-    emailjs
-      .sendForm(
-        "service_2caqcvc",
-        "template_iw56c3z",
-        form,
-        "7h1brFQKRSL5qlR-Y"
-      )
-      .then(
-        (result) => {
-          console.log("Email successfully sent:", result.text);
-          setSent(true);
-          form.reset();
-          startTimeRef.current = Date.now(); // reset timer
-          setTimeout(() => setSent(false), 2500);
-        },
-        (error) => {
-          console.error("EmailJS error:", error);
-          alert(
-            "Oops — something went wrong. Check console for details or your EmailJS setup."
-          );
-        }
-      );
+    try {
+      await addDoc(collection(db, "messages"), {
+        name: form.name.value,
+        email: form.email.value,
+        phone: form.phone.value,
+        date: form.date.value,
+        type: form.type.value,
+        message: form.message.value,
+        createdAt: serverTimestamp(),
+      });
+
+      setSent(true);
+      form.reset();
+      setEventSelected(false);
+      startTimeRef.current = Date.now();
+      setTimeout(() => setSent(false), 2500);
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -52,10 +50,9 @@ export default function Contact() {
       <div className="max-w-xl mx-auto bg-babyPink p-10 rounded-2xl shadow-lg border border-rosePink/30">
         <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-6">
           
-          {/* Honeypot field */}
-          <input type="text" name="website" autoComplete="off" style={{ display: "none" }} />
+          {/* Honeypot */}
+          <input type="text" name="website" autoComplete="off" className="hidden" />
 
-          {/* Name */}
           <input
             name="name"
             required
@@ -63,7 +60,6 @@ export default function Contact() {
             placeholder="Full name"
           />
 
-          {/* Phone */}
           <input
             name="phone"
             type="tel"
@@ -71,7 +67,6 @@ export default function Contact() {
             placeholder="Phone number"
           />
 
-          {/* Email */}
           <input
             name="email"
             type="email"
@@ -80,23 +75,36 @@ export default function Contact() {
             placeholder="Email address"
           />
 
-          {/* Date */}
+          {/* Event Date */}
           <input
             name="date"
             type="text"
             placeholder="Event date"
             onFocus={(e) => (e.target.type = "date")}
-            onBlur={(e) => { if (!e.target.value) e.target.type = "text"; }}
-            className="p-4 rounded-lg border border-rosePink/40 text-gray-400 focus:text-deepNavy focus:font-medium focus:outline-none focus:border-gold"
+            onBlur={(e) => {
+              if (!e.target.value) e.target.type = "text";
+            }}
+            onChange={(e) => {
+              e.target.classList.remove("text-gray-400");
+              e.target.classList.add("text-deepNavy", "font-medium");
+            }}
+            className="p-4 rounded-lg border border-rosePink/40 text-gray-400 focus:outline-none focus:border-gold"
           />
 
-          {/* Event type */}
+          {/* Event Type */}
           <select
             name="type"
-            className="p-4 rounded-lg border border-rosePink/40 text-gray-400 focus:text-deepNavy focus:font-medium focus:outline-none focus:border-gold"
             defaultValue=""
+            onChange={() => setEventSelected(true)}
+            className={`p-4 rounded-lg border border-rosePink/40 focus:outline-none focus:border-gold ${
+              eventSelected
+                ? "text-deepNavy font-medium"
+                : "text-gray-400"
+            }`}
           >
-            <option value="" disabled>Select event type</option>
+            <option value="" disabled>
+              Select event type
+            </option>
             <option>Wedding</option>
             <option>Birthday</option>
             <option>Corporate</option>
@@ -126,7 +134,6 @@ export default function Contact() {
             <option>Other</option>
           </select>
 
-          {/* Message */}
           <textarea
             name="message"
             required
@@ -134,20 +141,17 @@ export default function Contact() {
             placeholder="Tell us about your vision"
           />
 
-          {/* Submit */}
-          <div>
-            <button
-              type="submit"
-              className="w-full px-6 py-3 bg-gold text-deepNavy rounded-full font-semibold tracking-wide
-                         hover:bg-hoverGold hover:shadow-lg hover:-translate-y-[1px]
-                         transition-all duration-300"
-            >
-              Send Message
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="w-full px-6 py-3 bg-gold text-deepNavy rounded-full font-semibold tracking-wide
+                       hover:bg-hoverGold hover:shadow-lg hover:-translate-y-[1px]
+                       transition-all duration-300"
+          >
+            Send Message
+          </button>
 
           {sent && (
-            <p className="text-green-700 mt-2 text-center font-medium">
+            <p className="text-green-700 text-center font-medium">
               Thanks — your message has been sent. We’ll be in touch shortly.
             </p>
           )}
