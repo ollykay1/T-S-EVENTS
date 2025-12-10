@@ -4,9 +4,11 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Services from "./components/Service";
 import Gallery from "./components/Gallery";
+import About from "./components/About";
 import Contact from "./components/Contacts";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
+
 
 function App() {
   const [loadingFinished, setLoadingFinished] = useState(false);
@@ -21,8 +23,10 @@ function App() {
           <Hero />
           <Services />
           <Gallery />
-          <Contact />
+           <About />
+           <Contact />
           <Footer />
+         
           <WhatsAppButton />
         </div>
       )}

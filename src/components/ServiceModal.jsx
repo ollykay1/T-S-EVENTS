@@ -1,59 +1,118 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function ServiceModal({ service, onClose }) {
-  const modalRef = useRef();
+  const modalRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  /* iOS + desktop scroll lock */
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
 
   useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 20);
+
+    const onKey = (e) => {
+      if (e.key === "Escape") close();
+    };
+    document.addEventListener("keydown", onKey);
+
     const handleClickOutside = (e) => {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
-        onClose();
-      }
+      if (modalRef.current && !modalRef.current.contains(e.target)) close();
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [onClose]);
+
+    return () => {
+      clearTimeout(t);
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const close = () => {
+    setVisible(false);
+    setTimeout(onClose, 280); // slightly faster exit feels premium
+  };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start md:items-center justify-center p-4 bg-black/20 animate-fade-in">
+    <div
+      className={`
+        fixed inset-0 z-50 flex items-center justify-center px-4
+        transition-all duration-300
+        backdrop-blur-[6px]
+        ${visible ? "bg-black/60 opacity-100" : "bg-black/0 opacity-0"}
+      `}
+      role="dialog"
+      aria-modal="true"
+    >
       <div
         ref={modalRef}
-        className="w-full max-w-xs md:max-w-sm bg-gray-300 rounded-2xl p-6 shadow-lg transform scale-95 hover:scale-100 transition-all duration-300"
+        className={`
+          bg-[#111111] max-w-md w-full rounded-3xl p-8
+          border border-[#D4AF37]/40
+          shadow-[0_40px_80px_rgba(0,0,0,0.6)]
+          transform transition-all duration-[420ms] ease-out
+          ${visible
+            ? "translate-y-0 scale-[1] opacity-100"
+            : "translate-y-4 scale-[0.985] opacity-0"}
+        `}
       >
-        <div className="flex justify-between items-start gap-3">
-          <div>
-            <h3 className="text-xl md:text-2xl font-display text-deepNavy mb-2">
-              {service.title}
-            </h3>
-            <p className="text-gray-700 text-sm md:text-base whitespace-pre-line">
-              {service.writeUp}
-            </p>
-            <div className="mt-4">
-              <h4 className="text-base font-semibold text-deepNavy mb-1">
-                What we include
-              </h4>
-              <ul className="list-disc pl-5 text-gray-700 text-sm md:text-base">
-                {service.list.map((item, i) => (
-                  <li key={i} className="mb-1">{item}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
+        <div className="flex justify-between items-start mb-5">
+          <h3 className="text-2xl font-display text-[#F5E7C4]">
+            {service.title}
+          </h3>
 
           <button
-            onClick={onClose}
-            className="w-8 h-8 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white font-bold flex items-center justify-center"
+            onClick={close}
+            className="
+              w-8 h-8 flex items-center justify-center rounded-full
+              bg-white/10 text-white
+              transition-all duration-300
+              hover:bg-white hover:text-black
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]/40
+            "
+            aria-label="Close details"
           >
             ✕
           </button>
         </div>
 
-        <div className="mt-4 flex justify-end">
+        <p className="text-gray-300 text-sm leading-loose whitespace-pre-line mb-7">
+          {service.writeUp}
+        </p>
+
+        <h4 className="text-[#D4AF37] font-semibold text-xs tracking-wide uppercase mb-3">
+          Service Highlights
+        </h4>
+
+        <ul className="list-disc pl-5 text-gray-300 text-sm space-y-1.5 mb-8">
+          {service.list.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ul>
+
+        <div className="text-right">
           <button
             onClick={() => {
-              onClose();
-              document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+              close();
+              setTimeout(() => {
+                document
+                  .getElementById("contact")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }, 320);
             }}
-            className="px-4 py-2 md:px-6 md:py-3 bg-gold text-deepNavy rounded-full hover:bg-hoverGold transition font-semibold text-sm md:text-base"
+            className="
+              px-7 py-3 rounded-full
+              bg-[#D4AF37] text-black text-sm font-semibold tracking-wide
+              transition-all duration-400
+              hover:bg-[#E5C763]
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]/40
+            "
           >
             Book This Service
           </button>

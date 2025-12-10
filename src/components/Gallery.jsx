@@ -1,164 +1,230 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 export default function Gallery() {
   const galleryItems = [
     {
-      title: "Wedding Highlights",
-      subtitle: "Bespoke ceremonies & decor",
+      title: "Wedding Ceremonies",
+      subtitle: "Elegant celebrations styled with timeless restraint",
       images: ["/images/wedding1.jpg", "/images/wedding2.jpg", "/images/wedding3.jpg"],
     },
     {
-      title: "Birthday Celebrations",
-      subtitle: "Joyful moments for all ages",
-      images: ["/images/birthday1.jpg", "/images/birthday2.jpg", "/images/birthday3.jpg"],
+      title: "Traditional Weddings",
+      subtitle: "Culturally rooted ceremonies delivered with refined coordination",
+      images: ["/images/traditional1.jpg", "/images/traditional2.jpg", "/images/traditional3.jpg"],
     },
     {
-      title: "Corporate Events",
-      subtitle: "Professional and polished gatherings",
-      images: ["/images/corporate1.jpg", "/images/corporate2.jpg", "/images/corporate3.jpg"],
-    },
-    {
-      title: "Engagement Parties",
-      subtitle: "Romantic and intimate settings",
+      title: "Engagement & Introduction",
+      subtitle: "Meaningful beginnings honoured with beauty and respect",
       images: ["/images/engagement1.jpg", "/images/engagement2.jpg", "/images/engagement3.jpg"],
     },
     {
-      title: "Private Soirées",
-      subtitle: "Exclusive luxury experiences",
-      images: ["/images/private1.jpg", "/images/private2.jpg", "/images/private3.jpg"],
+      title: "Birthday Celebrations",
+      subtitle: "Personal milestone moments styled to feel intimate and joyful",
+      images: ["/images/birthday1.jpg", "/images/birthday2.jpg", "/images/birthday3.jpg"],
     },
     {
-      title: "Anniversary Moments",
-      subtitle: "Celebrate milestones elegantly",
+      title: "Naming Ceremonies",
+      subtitle: "Warm, family-centred gatherings handled with care",
+      images: ["/images/naming1.jpg", "/images/naming2.jpg", "/images/naming3.jpg"],
+    },
+    {
+      title: "Anniversary Celebrations",
+      subtitle: "Years of love honoured in an atmosphere of quiet elegance",
       images: ["/images/anniversary1.jpg", "/images/anniversary2.jpg", "/images/anniversary3.jpg"],
     },
     {
-      title: "Themed Events",
-      subtitle: "Immersive experiences & decor",
-      images: ["/images/themed1.jpg", "/images/themed2.jpg", "/images/themed3.jpg"],
+      title: "Burial & Memorial Events",
+      subtitle: "Dignified farewells coordinated with sensitivity and grace",
+      images: ["/images/burial1.jpg", "/images/burial2.jpg", "/images/burial3.jpg"],
     },
     {
-      title: "Fundraisers & Galas",
-      subtitle: "Elegant charitable events",
-      images: ["/images/fundraiser1.jpg", "/images/fundraiser2.jpg", "/images/fundraiser3.jpg"],
+      title: "Certifications & Accreditations",
+      subtitle: "Professional certifications validating our event standards",
+      images: ["../images/cert1.pdf", "/images/4bg.avif", "/images/cert3.jpg"],
     },
     {
-      title: "Cultural Ceremonies",
-      subtitle: "Respectful & stylish arrangements",
-      images: ["/images/cultural1.jpg", "/images/cultural2.jpg", "/images/cultural3.jpg"],
+      title: "Our Event Specialists",
+      subtitle: "The planners, designers, and coordinators behind every detail",
+      images: ["/images/team1.jpg", "/images/team2.jpg", "/images/team3.jpg"],
     },
   ];
 
   const [activeIndex, setActiveIndex] = useState(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
-  const [transition, setTransition] = useState(false);
-  const [loaded, setLoaded] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
 
+  const autoSlideRef = useRef(null);
+  const touchStartX = useRef(null);
+  const revealRefs = useRef([]);
+
+  /* Lock body scroll when modal is open */
   useEffect(() => {
-    const t = setTimeout(() => setLoaded(true), 100);
-    return () => clearTimeout(t);
+    if (activeIndex !== null) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [activeIndex]);
+
+  /* Reveal on scroll */
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries =>
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add("reveal-active");
+        }),
+      { threshold: 0.12 }
+    );
+
+    revealRefs.current.forEach(el => el && observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
-  const openLightbox = (index) => {
-    setActiveIndex(index);
-    setCarouselIndex(0);
-    setTransition(false);
-  };
-  const closeLightbox = () => setActiveIndex(null);
+  /* Auto slide */
+  useEffect(() => {
+    if (activeIndex === null || userInteracted) return;
 
-  const changeImage = (next) => {
-    const images = galleryItems[activeIndex].images;
-    setTransition(true);
-    setTimeout(() => {
-      setCarouselIndex((prev) => (next ? (prev + 1) % images.length : (prev - 1 + images.length) % images.length));
-      setTransition(false);
-    }, 300);
+    autoSlideRef.current = setInterval(() => {
+      setCarouselIndex(
+        p => (p + 1) % galleryItems[activeIndex].images.length
+      );
+    }, 3000);
+
+    return () => clearInterval(autoSlideRef.current);
+  }, [activeIndex, userInteracted]);
+
+  const openLightbox = i => {
+    setActiveIndex(i);
+    setCarouselIndex(0);
+    setUserInteracted(false);
+  };
+
+  const closeLightbox = () => {
+    clearInterval(autoSlideRef.current);
+    setActiveIndex(null);
+  };
+
+  const nextImage = () => {
+    setUserInteracted(true);
+    setCarouselIndex(
+      p => (p + 1) % galleryItems[activeIndex].images.length
+    );
+  };
+
+  const prevImage = () => {
+    setUserInteracted(true);
+    setCarouselIndex(
+      p =>
+        (p - 1 + galleryItems[activeIndex].images.length) %
+        galleryItems[activeIndex].images.length
+    );
+  };
+
+  const onTouchStart = e => (touchStartX.current = e.touches[0].clientX);
+  const onTouchEnd = e => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) diff > 0 ? nextImage() : prevImage();
+    touchStartX.current = null;
   };
 
   return (
-    <section id="gallery" className="min-h-screen bg-babyPink py-24 px-6">
-      <h2 className="text-5xl font-display text-deepNavy text-center mb-12">Gallery</h2>
+    <section
+      id="gallery"
+      className="relative py-28 px-6 bg-[#0B0D10] overflow-hidden"
+    >
+      {/* Grain overlay */}
+      <div className="pointer-events-none absolute inset-0 bg-[url('/images/grain.png')] opacity-[0.06] mix-blend-overlay" />
 
-      <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
+      <h2 className="text-5xl font-serif text-[#F5F0E6] text-center mb-16">
+        Our Signature Moments
+      </h2>
+
+      <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-10">
         {galleryItems.map((item, i) => (
           <div
             key={i}
-            className={`relative h-72 rounded-2xl shadow-lg overflow-hidden cursor-pointer transform transition-all ${
-              loaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
-            }`}
-            style={{ transitionDelay: `${i * 100}ms` }}
+            ref={el => (revealRefs.current[i] = el)}
             onClick={() => openLightbox(i)}
+            className="reveal-card relative h-80 rounded-3xl overflow-hidden cursor-pointer bg-[#12141A]"
           >
             <img
+              loading="lazy"
               src={item.images[0]}
               alt={item.title}
-              className="w-full h-full object-cover rounded-2xl brightness-90 hover:brightness-100 transition"
+              className="w-full h-full object-cover transition-transform duration-[900ms] hover:scale-[1.04]"
             />
-            <div className="absolute inset-0 bg-black/25 opacity-0 hover:opacity-100 transition flex flex-col justify-end p-4 rounded-2xl">
-              <h3 className="text-lg font-semibold text-ivory">{item.title}</h3>
-              <p className="text-sm text-ivory/80">{item.subtitle}</p>
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent flex flex-col justify-end p-6">
+              <h3 className="text-xl font-serif text-[#F5F0E6] mb-1">
+                {item.title}
+              </h3>
+              <p className="text-sm text-[#CFC7B8] leading-relaxed">
+                {item.subtitle}
+              </p>
             </div>
           </div>
         ))}
       </div>
 
+      {/* MODAL */}
       {activeIndex !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center px-4"
           onClick={closeLightbox}
         >
           <div
-            className="bg-softWhite rounded-2xl max-w-3xl w-full p-6 relative flex flex-col items-center"
-            onClick={(e) => e.stopPropagation()}
+            className="bg-[#12141A] max-w-4xl w-full rounded-3xl p-8 border border-[#D6B46A]/30"
+            onClick={e => e.stopPropagation()}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
           >
-            <button
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white font-bold flex items-center justify-center"
-              onClick={closeLightbox}
-            >
-              ✕
-            </button>
+            <h3 className="text-3xl font-serif text-[#F5F0E6] mb-2 text-center">
+              {galleryItems[activeIndex].title}
+            </h3>
+            <p className="text-[#CFC7B8] text-center mb-6">
+              {galleryItems[activeIndex].subtitle}
+            </p>
 
-            <h3 className="text-3xl font-display text-deepNavy mb-2">{galleryItems[activeIndex].title}</h3>
-            <p className="text-gray-700 mb-4 text-center">{galleryItems[activeIndex].subtitle}</p>
-
-            <div className="relative w-full h-64 flex items-center justify-center mb-4 overflow-hidden rounded-lg">
+            <div className="relative h-72 rounded-2xl overflow-hidden">
               <img
-                key={carouselIndex}
                 src={galleryItems[activeIndex].images[carouselIndex]}
-                alt={galleryItems[activeIndex].title}
-                className={`rounded-lg w-full h-full object-cover transition-opacity duration-300 ${
-                  transition ? "opacity-0 scale-95" : "opacity-100 scale-100"
-                }`}
+                alt=""
+                className="w-full h-full object-cover transition-all duration-700"
               />
 
-              <button
-                onClick={() => changeImage(false)}
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gold text-deepNavy rounded-full w-10 h-10 flex items-center justify-center hover:bg-hoverGold transition"
-              >
+              <button onClick={prevImage} className="modal-arrow left-4">
                 ‹
               </button>
-              <button
-                onClick={() => changeImage(true)}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gold text-deepNavy rounded-full w-10 h-10 flex items-center justify-center hover:bg-hoverGold transition"
-              >
+              <button onClick={nextImage} className="modal-arrow right-4">
                 ›
               </button>
-            </div>
-
-            <div className="flex justify-center gap-2">
-              {galleryItems[activeIndex].images.map((_, idx) => (
-                <span
-                  key={idx}
-                  onClick={() => setCarouselIndex(idx)}
-                  className={`w-3 h-3 rounded-full cursor-pointer ${
-                    idx === carouselIndex ? "bg-gold" : "bg-gray-400"
-                  }`}
-                ></span>
-              ))}
             </div>
           </div>
         </div>
       )}
+
+      <style>{`
+        .reveal-card {
+          opacity: 0;
+          transform: translateY(28px);
+          transition: all 700ms ease;
+        }
+        .reveal-card.reveal-active {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .modal-arrow {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 42px;
+          height: 42px;
+          border-radius: 9999px;
+          background: #D6B46A;
+          color: #111;
+          font-size: 22px;
+        }
+      `}</style>
     </section>
   );
 }

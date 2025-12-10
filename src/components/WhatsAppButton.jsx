@@ -1,21 +1,71 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-export default function Whatsapp() {
+export default function WhatsAppButton({ hide }) {
+  const [visible, setVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [inHero, setInHero] = useState(true);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // hide on scroll down, show on scroll up
+      if (currentScrollY > lastScrollY && currentScrollY > 120) {
+        setVisible(false);
+      } else {
+        setVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+
+      // hide while hero is in view
+      const hero = document.getElementById("hero");
+      if (hero) {
+        const rect = hero.getBoundingClientRect();
+        setInHero(rect.bottom > 100);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [lastScrollY]);
+
+  const shouldShow = visible && !hide && !inHero;
+
   return (
     <a
-       href="https://wa.me/2349133250794"
+      href="https://wa.me/2349133250794"
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-20 right-6 flex items-center justify-center w-14 h-14 rounded-full bg-green-500 hover:bg-green-600 transition shadow-lg"
-      aria-label="WhatsApp Chat"
+      aria-label="Chat with us on WhatsApp"
+      className={`
+        fixed z-40
+        bottom-6 right-5 sm:bottom-8 sm:right-8
+        w-14 h-14
+        rounded-full
+        flex items-center justify-center
+        bg-[#1F3D2B]
+        border border-[#D4AF37]/40
+        shadow-[0_14px_34px_rgba(0,0,0,0.45)]
+        transition-all duration-500 ease-out
+        hover:scale-[1.06]
+        hover:bg-[#274E37]
+        active:scale-95
+        ${
+          shouldShow
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-6 pointer-events-none"
+        }
+      `}
     >
+      <span className="absolute inset-0 rounded-full bg-[url('/images/grain.png')] opacity-[0.04]" />
+
       <svg
-        className="w-7 h-7 text-white"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="currentColor"
+        className="w-6 h-6 text-[#F5E7C4]"
         viewBox="0 0 24 24"
+        fill="currentColor"
       >
-        <path d="M20.52 3.48A11.924 11.924 0 0 0 12 0C5.373 0 0 5.373 0 12c0 2.114.553 4.088 1.52 5.84L0 24l6.384-1.496A11.938 11.938 0 0 0 12 24c6.627 0 12-5.373 12-12 0-3.195-1.244-6.14-3.48-8.52zM12 22.05a10.05 10.05 0 0 1-5.31-1.466l-.383-.227-3.794.89.853-3.703-.251-.385A10.027 10.027 0 1 1 12 22.05zm5.31-7.7c-.276-.138-1.637-.81-1.89-.904-.253-.094-.438-.138-.622.138-.184.276-.71.903-.872 1.09-.161.184-.323.207-.6.069-.276-.138-1.162-.429-2.215-1.369-.818-.729-1.37-1.627-1.53-1.903-.161-.276-.017-.425.121-.563.124-.123.276-.323.414-.484.138-.161.184-.276.276-.46.092-.184.046-.345-.023-.483-.069-.138-.622-1.49-.853-2.042-.224-.537-.45-.464-.622-.473l-.53-.01c-.161 0-.422.061-.644.276-.223.215-.85.83-.85 2.03s.871 2.36.993 2.523c.123.161 1.713 2.619 4.15 3.667 2.438 1.046 2.438.698 2.875.654.437-.046 1.418-.578 1.618-1.138.2-.552.2-1.025.138-1.138-.061-.092-.223-.138-.5-.276z" />
+        <path d="M20.52 3.48A11.924 11.924 0 0 0 12 0C5.373 0 0 5.373 0 12c0 2.114.553 4.088 1.52 5.84L0 24l6.384-1.496A11.938 11.938 0 0 0 12 24c6.627 0 12-5.373 12-12 0-3.195-1.244-6.14-3.48-8.52z" />
       </svg>
     </a>
   );

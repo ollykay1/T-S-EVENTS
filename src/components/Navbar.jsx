@@ -7,8 +7,10 @@ export default function Navbar() {
       <ul className="flex gap-6">
         <li>Home</li>
         <li>Services</li>
+        <li>About</li>
         <li>Gallery</li>
         <li>Contact</li>
+        
       </ul>
     </nav>
   );

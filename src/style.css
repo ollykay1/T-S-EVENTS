@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 /* Colors (Option A) */
 :root{
   --deepNavy: #1B1F3B;
@@ -14,6 +15,7 @@
   --accentBlue: #0B3D91;
 }
 
+
 /* Base */
 html, body {
   background-color: var(--ivory);
@@ -24,21 +26,26 @@ html, body {
 
 section { min-height: 100vh; padding-top: 5rem; }
 
+
 /* Hero overlay for contrast on bright images */
 .hero-overlay {
   background: linear-gradient(180deg, rgba(11,17,35,0.55) 0%, rgba(11,17,35,0.35) 50%, rgba(11,17,35,0.12) 100%);
 }
 
+
 /* Typography helpers */
 .font-display { font-family: 'Cinzel', serif; }
 .font-body { font-family: 'Poppins', sans-serif; }
+
 
 /* Animations */
 .fade-up { animation: fadeUp 1s ease-out both; }
 @keyframes fadeUp { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)} }
 
+
 .scale-in { animation: scaleIn .7s cubic-bezier(.2,.9,.2,1) both; }
 @keyframes scaleIn { from{opacity:0; transform:scale(.98)} to{opacity:1; transform:scale(1)} }
+
 
 /* Buttons */
 .btn {
@@ -54,15 +61,229 @@ section { min-height: 100vh; padding-top: 5rem; }
 }
 .btn-gold:hover { background: var(--hoverGold); transform: translateY(-3px); }
 
+
 /* Cards */
 .card-lux { box-shadow: 0 15px 40px rgba(11,29,60,0.12); border-radius: 18px; }
+
 
 /* Footer */
 .footer-link { color: var(--ivory); }
 .footer-link:hover { color: var(--gold); }
+
 
 /* small helpers */
 .text-ivory { color: var(--ivory); }
 .text-gold { color: var(--gold); }
 .bg-babyPink { background-color: var(--babyPink); }
 .bg-deepNavy { background-color: var(--deepNavy); }
+
+
+/* Hero specific animation: slide up + fade in */
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ===== Header / Nav enhancements ===== */
+
+/* Brand name luxury entrance (optional if you re-add .brand-name-lux) */
+.brand-name-lux {
+  display: inline-block;
+  position: relative;
+  animation: brandNameLux 1s ease-out both;
+}
+
+@keyframes brandNameLux {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+    letter-spacing: 0.35em;
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.18em;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.12em;
+  }
+}
+
+/* Desktop nav link hover underline (if you want a reusable class) */
+.nav-link-lux {
+  position: relative;
+  padding-bottom: 2px;
+  transition: color 0.25s ease;
+}
+
+.nav-link-lux::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0%;
+  height: 2px;
+  background: #D4AF37;
+  transition: width 0.3s ease;
+}
+
+.nav-link-lux:hover::after {
+  width: 100%;
+}
+
+/* Mobile nav item fade-in */
+.mobile-nav-item {
+  animation: mobileNavIn 0.25s ease-out both;
+}
+
+@keyframes mobileNavIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Brand name luxury animation – only affects the brand line */
+.brand-name-flow {
+  display: inline-block;
+  position: relative;
+  animation: brandNameFlow 0.9s ease-out forwards;
+}
+
+/* Gold text */
+.brand-name-gold {
+  color: var(--gold);
+}
+
+/* Underline just below the brand name (not touching the tagline) */
+.brand-name-flow::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;             /* closer to the brand text, away from tagline */
+  width: 0;
+  height: 2px;
+  background: #D4AF37;
+  transition: none;
+  animation: brandUnderline 0.6s ease-out forwards;
+  animation-delay: 0.35s;   /* starts after the text has faded in */
+}
+
+/* Text fade + rise + slight tracking tighten */
+@keyframes brandNameFlow {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+    letter-spacing: 0.35em;
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.2em;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.16em;
+  }
+}
+
+/* Underline draws from left to right once */
+@keyframes brandUnderline {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  40% {
+    width: 100%;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 1;
+  }
+}
+/* Brand name: gold text with hover underline animation */
+.brand-name-hover-gold {
+  position: relative;
+  color: var(--gold);
+  display: inline-block;
+}
+
+/* the line, hidden by default */
+.brand-name-hover-gold::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;          /* close to brand text, above tagline */
+  width: 0;
+  height: 2px;
+  background: #D4AF37;
+  transition: width 0.3s ease;
+}
+
+/* on hover (desktop) and focus (keyboard / tap) the line draws in */
+.brand-name-hover-gold:hover::after,
+.brand-name-hover-gold:focus-visible::after {
+  width: 100%;
+}
+/* ----------------------------------
+   Ultra-soft luxury focus ring
+---------------------------------- */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.35);
+  border-radius: 999px;
+}
+
+/* ----------------------------------
+   Scroll reveal utilities
+---------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 900ms ease,
+    transform 900ms ease;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* ----------------------------------
+   Ultra-soft luxury focus ring
+---------------------------------- */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.35);
+  border-radius: 999px;
+}
+
+/* ----------------------------------
+   Scroll reveal utilities
+---------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 900ms ease,
+    transform 900ms ease;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}

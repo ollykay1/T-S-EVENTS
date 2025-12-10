@@ -1,162 +1,164 @@
-import React, { useState, useRef } from "react";
-import { db } from "../firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import React, { useRef, useState } from "react";
+import {
+  FaPhoneAlt,
+  FaInstagram,
+  FaFacebookF,
+  FaTiktok,
+  FaWhatsapp,
+} from "react-icons/fa";
+import { HiMail } from "react-icons/hi";
 
 export default function Contact() {
-  const [sent, setSent] = useState(false);
-  const [eventSelected, setEventSelected] = useState(false);
   const formRef = useRef(null);
-  const startTimeRef = useRef(Date.now());
+  const [sent, setSent] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    const form = formRef.current;
-
-    // Honeypot
-    if (form.website?.value) return;
-
-    // Time-based check
-    if (Date.now() - startTimeRef.current < 2000) return;
-
-    try {
-      await addDoc(collection(db, "messages"), {
-        name: form.name.value,
-        email: form.email.value,
-        phone: form.phone.value,
-        date: form.date.value,
-        type: form.type.value,
-        message: form.message.value,
-        createdAt: serverTimestamp(),
-      });
-
-      setSent(true);
-      form.reset();
-      setEventSelected(false);
-      startTimeRef.current = Date.now();
-      setTimeout(() => setSent(false), 2500);
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong. Please try again.");
-    }
+    setSent(true);
+    formRef.current.reset();
   };
 
   return (
-    <section id="contact" className="min-h-screen bg-softWhite py-24 px-6">
-      <h2 className="text-5xl font-display text-deepNavy text-center mb-12">
-        Contact Us
-      </h2>
+    <section
+      id="contact"
+      className="relative bg-[#0c0c0c] py-28 px-6 overflow-hidden"
+    >
+      {/* Grain */}
+      <div className="absolute inset-0 bg-[url('/images/grain.png')] opacity-[0.05]" />
 
-      <div className="max-w-xl mx-auto bg-babyPink p-10 rounded-2xl shadow-lg border border-rosePink/30">
-        <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-6">
-          
-          {/* Honeypot */}
-          <input type="text" name="website" autoComplete="off" className="hidden" />
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 relative">
+        {/* LEFT */}
+        <div>
+          <h2 className="text-5xl font-serif text-[#F5E7C4] mb-6">
+            Contact Us
+          </h2>
 
-          <input
-            name="name"
-            required
-            className="p-4 rounded-lg border border-rosePink/40 focus:outline-none focus:border-gold font-medium text-deepNavy"
-            placeholder="Full name"
-          />
+          <p className="text-[#e6dcc6] text-lg leading-relaxed mb-10">
+            We approach every event with discretion, structure, and exceptional
+            standards. Share your details and we’ll guide you from concept to
+            execution.
+          </p>
 
-          <input
-            name="phone"
-            type="tel"
-            className="p-4 rounded-lg border border-rosePink/40 focus:outline-none focus:border-gold font-medium text-deepNavy"
-            placeholder="Phone number"
-          />
+          {/* CONTACT INFO */}
+          <div className="space-y-6 text-[#e6dcc6]">
+            <a
+              href="tel:+2349133250794"
+              className="flex items-center gap-4 hover:text-[#D4AF37]"
+            >
+              <FaPhoneAlt /> +234 913 325 0794
+            </a>
 
-          <input
-            name="email"
-            type="email"
-            required
-            className="p-4 rounded-lg border border-rosePink/40 focus:outline-none focus:border-gold font-medium text-deepNavy"
-            placeholder="Email address"
-          />
+            <a
+              href="mailto:oluwatosinruth111@gmail.com"
+              className="flex items-center gap-4 hover:text-[#D4AF37]"
+            >
+              <HiMail size={20} /> oluwatosinruth111@gmail.com
+            </a>
 
-          {/* Event Date */}
-          <input
-            name="date"
-            type="text"
-            placeholder="Event date"
-            onFocus={(e) => (e.target.type = "date")}
-            onBlur={(e) => {
-              if (!e.target.value) e.target.type = "text";
-            }}
-            onChange={(e) => {
-              e.target.classList.remove("text-gray-400");
-              e.target.classList.add("text-deepNavy", "font-medium");
-            }}
-            className="p-4 rounded-lg border border-rosePink/40 text-gray-400 focus:outline-none focus:border-gold"
-          />
+            <a
+              href="https://wa.me/2349133250794"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 hover:text-[#D4AF37]"
+            >
+              <FaWhatsapp /> WhatsApp · Chat with us
+            </a>
+          </div>
 
-          {/* Event Type */}
-          <select
-            name="type"
-            defaultValue=""
-            onChange={() => setEventSelected(true)}
-            className={`p-4 rounded-lg border border-rosePink/40 focus:outline-none focus:border-gold ${
-              eventSelected
-                ? "text-deepNavy font-medium"
-                : "text-gray-400"
-            }`}
-          >
-            <option value="" disabled>
-              Select event type
-            </option>
-            <option>Wedding</option>
-            <option>Birthday</option>
-            <option>Corporate</option>
-            <option>Social</option>
-            <option>Fundraiser</option>
-            <option>Festival</option>
-            <option>Conference</option>
-            <option>Product Launch</option>
-            <option>Holiday Party</option>
-            <option>Anniversary</option>
-            <option>Reunion</option>
-            <option>Engagement</option>
-            <option>Bridal Shower</option>
-            <option>Baby Shower</option>
-            <option>Graduation</option>
-            <option>Religious Ceremony</option>
-            <option>Cultural Event</option>
-            <option>Outdoor Event</option>
-            <option>House Warming</option>
-            <option>Hybrid Event</option>
-            <option>Team Building</option>
-            <option>Award Ceremony</option>
-            <option>Press Event</option>
-            <option>Exhibition / Trade Show</option>
-            <option>Private</option>
-            <option>Burial Ceremony</option>
-            <option>Other</option>
-          </select>
+          {/* SOCIALS */}
+          <div className="mt-10 space-y-4 text-[#e6dcc6]">
+            <a
+              href="https://www.instagram.com/ts_elite_events"
+              target="_blank"
+              className="flex items-center gap-4 hover:text-[#D4AF37]"
+            >
+              <FaInstagram /> Instagram · @ts_elite_events
+            </a>
 
-          <textarea
-            name="message"
-            required
-            className="p-4 rounded-lg border border-rosePink/40 h-36 focus:outline-none focus:border-gold font-medium text-deepNavy"
-            placeholder="Tell us about your vision"
-          />
+            <a
+              href="https://www.tiktok.com/@oluwatosinomotos7"
+              target="_blank"
+              className="flex items-center gap-4 hover:text-[#D4AF37]"
+            >
+              <FaTiktok /> TikTok · @oluwatosinomotos7
+            </a>
 
-          <button
-            type="submit"
-            className="w-full px-6 py-3 bg-gold text-deepNavy rounded-full font-semibold tracking-wide
-                       hover:bg-hoverGold hover:shadow-lg hover:-translate-y-[1px]
-                       transition-all duration-300"
-          >
-            Send Message
-          </button>
+            <a
+              href="https://www.facebook.com/share/14Rdg9SZBBE/"
+              target="_blank"
+              className="flex items-center gap-4 hover:text-[#D4AF37]"
+            >
+              <FaFacebookF /> Facebook · T&S Elite Events
+            </a>
+          </div>
+        </div>
 
-          {sent && (
-            <p className="text-green-700 text-center font-medium">
-              Thanks — your message has been sent. We’ll be in touch shortly.
-            </p>
-          )}
-        </form>
+        {/* FORM */}
+        <div className="bg-[#0a0a0a] border border-[#D4AF37]/25 rounded-3xl p-10 shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
+          <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+            <input name="name" required placeholder="Full name" className="lux-input" />
+            <input name="phone" placeholder="Phone number" className="lux-input" />
+            <input name="email" type="email" required placeholder="Email address" className="lux-input" />
+            <select name="event" className="lux-input">
+              <option>Event type</option>
+              <option>Wedding</option>
+              <option>Traditional Ceremony</option>
+              <option>Birthday</option>
+              <option>Engagement</option>
+              <option>Anniversary</option>
+              <option>Corporate Event</option>
+              <option>Graduation</option>
+
+              <option>Other</option>
+            </select>
+            <textarea name="message" rows="4" placeholder="Briefly describe your event" className="lux-input" />
+
+            <button
+              type="submit"
+              className="w-full bg-[#D4AF37] hover:bg-[#c6a533] text-black py-4 rounded-xl font-medium transition"
+            >
+              Send Message
+            </button>
+          </form>
+        </div>
       </div>
+
+      {sent && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur flex items-center justify-center">
+          <div className="bg-[#101010] border border-[#D4AF37]/40 rounded-2xl p-10 text-center max-w-md">
+            <h3 className="text-2xl font-serif text-[#F5E7C4] mb-3">
+              Message Sent
+            </h3>
+            <p className="text-[#e6dcc6] mb-6">
+              We’ll contact you shortly.
+            </p>
+            <button
+              onClick={() => setSent(false)}
+              className="px-8 py-3 bg-[#D4AF37] text-black rounded-full"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        .lux-input {
+          width: 100%;
+          background: rgba(0,0,0,0.45);
+          border: 1px solid rgba(212,175,55,0.25);
+          border-radius: 12px;
+          padding: 14px 16px;
+          color: #F5E7C4;
+        }
+        .lux-input::placeholder {
+          color: #bfb6a5;
+        }
+        .lux-input:focus {
+          outline: none;
+          border-color: #D4AF37;
+        }
+      `}</style>
     </section>
   );
 }
