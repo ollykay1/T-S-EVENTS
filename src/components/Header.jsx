@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-  useEffect(() => {
-  if (open) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "";
-  }
-  return () => {
-    document.body.style.overflow = "";
-  };
-}, [open]);
 
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   const menuItems = [
     { label: "Home", target: "hero" },
@@ -28,45 +28,53 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed w-full top-0 left-0 z-50 bg-[#111111]/95 backdrop-blur-md border-b border-[#D4AF37]/25">
+    <header className="fixed w-full top-0 left-0 z-50 bg-black/90 backdrop-blur-md border-b border-[#D4AF37]/30">
       <div className="max-w-7xl mx-auto flex items-center px-6 py-4">
-        {/* Logo */}
+        {/* Logo – left aligned, simple & classic */}
         <div
           onClick={() => scrollTo("hero")}
-          className="flex items-center gap-3 cursor-pointer"
+          className="group flex items-center gap-3 cursor-pointer"
         >
-          <div className="w-12 h-12 bg-[#D4AF37] text-black font-bold flex items-center justify-center rounded-md shadow-md shadow-black/40">
-            T&S
+          {/* Brand mark (no animation) */}
+          <div className="flex h-11 w-11 items-center justify-center rounded-md border border-[#D4AF37] bg-black shadow-lg shadow-black/40">
+            <span className="text-sm font-semibold tracking-[0.18em] text-[#D4AF37]">
+              T&amp;S
+            </span>
           </div>
-          <div>
-            {/* Animated brand name */}
-           <div className="text-2xl font-display font-extrabold tracking-wide">
-  <span className="brand-name-hover-gold">T&S ELITE EVENTS</span>
-</div>
 
+          {/* Wordmark with clean hover underline */}
+          <div className="leading-tight">
+            <div className="relative inline-block">
+              <span className="text-[0.8rem] font-semibold tracking-[0.24em] text-white uppercase">
+                T&amp;S Elite Events
+              </span>
+              {/* underline only appears smoothly on hover – no initial line */}
+              <span className="pointer-events-none absolute left-0 top-full mt-1 block h-[2px] w-0 bg-[#D4AF37] transition-all duration-500 group-hover:w-full" />
+            </div>
 
-            <div className="text-[0.7rem] text-[#F5E7C4] font-semibold tracking-[0.25em] uppercase">
+            <div className="mt-1 text-[0.65rem] text-[#F5E7C4] font-semibold tracking-[0.28em] uppercase">
               Bespoke &amp; Luxurious
             </div>
           </div>
         </div>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex gap-8 ml-auto">
+        <nav className="hidden md:flex items-center gap-8 ml-auto">
           {menuItems.map((item) => (
             <button
               key={item.target}
               onClick={() => scrollTo(item.target)}
               className="
-                text-[#F5F5F5]
-                text-sm
+                text-white/90
+                text-xs
                 font-display
                 font-semibold
                 tracking-[0.18em]
                 uppercase
                 relative
+                pb-1
                 after:absolute
-                after:-bottom-1
+                after:-bottom-0.5
                 after:left-0
                 after:w-0
                 after:h-[2px]
@@ -74,7 +82,7 @@ export default function Header() {
                 after:transition-all
                 after:duration-300
                 hover:after:w-full
-                hover:text-gold
+                hover:text-[#D4AF37]
                 transition-colors
                 duration-300
               "
@@ -86,52 +94,51 @@ export default function Header() {
 
         {/* Mobile toggle */}
         <button
-          className="md:hidden ml-auto text-[#F5F5F5] text-3xl"
+          className="md:hidden ml-auto text-white text-3xl"
           onClick={() => setOpen(!open)}
+          aria-label={open ? "Close navigation" : "Open navigation"}
         >
           {open ? "✕" : "☰"}
         </button>
       </div>
 
-    {/* Mobile menu */}
-{open && (
-  <div
-    className="fixed inset-0 z-40 md:hidden "
-    onClick={() => setOpen(false)} // click anywhere outside menu closes
-  >
-    {/* Menu container, pushed down below header */}
-    <div
-      className="
-        mt-[72px]
-        bg-[#111111]
-        px-6 pb-6
-        border-t border-[#D4AF37]/25
-        shadow-lg shadow-black/60
-      "
-      onClick={(e) => e.stopPropagation()} // prevent close when clicking inside
-    >
-      {menuItems.map((item, index) => (
-        <button
-          key={item.target}
-          onClick={() => scrollTo(item.target)}
-          className={`
-            block w-full text-left py-3
-            text-[#F5F5F5]
-            font-semibold
-            tracking-[0.18em]
-            uppercase
-            mobile-nav-item
-          `}
-          style={{ animationDelay: `${index * 0.04}s` }}
+      {/* Mobile menu */}
+      {open && (
+        <div
+          className="fixed inset-0 z-40 md:hidden"
+          onClick={() => setOpen(false)}
         >
-          {item.label}
-        </button>
-      ))}
-    </div>
-  </div>
-)}
-
-
+          {/* Menu container, pushed down below header */}
+          <div
+            className="
+              mt-[72px]
+              bg-black
+              px-6 pb-6
+              border-t border-[#D4AF37]/30
+              shadow-lg shadow-black/60
+            "
+            onClick={(e) => e.stopPropagation()}
+          >
+            {menuItems.map((item, index) => (
+              <button
+                key={item.target}
+                onClick={() => scrollTo(item.target)}
+                className={`
+                  block w-full text-left py-3
+                  text-white/90
+                  font-semibold
+                  tracking-[0.18em]
+                  uppercase
+                  mobile-nav-item
+                `}
+                style={{ animationDelay: `${index * 0.04}s` }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </header>
   );
 }
