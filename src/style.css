@@ -263,3 +263,16 @@ section { min-height: 100vh; padding-top: 5rem; }
 .logo-mark {
   animation: luxury-glow 3s ease-in-out infinite;
 }
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.selectable {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}

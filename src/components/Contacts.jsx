@@ -11,11 +11,39 @@ import { HiMail } from "react-icons/hi";
 export default function Contact() {
   const formRef = useRef(null);
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSent(true);
-    formRef.current.reset();
+
+    const form = formRef.current;
+    if (!form) return;
+
+    setLoading(true);
+
+    const formData = new FormData(form);
+    formData.append("access_key", "ec53946d-48f6-46cf-a493-8ee0fd55a74b");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setSent(true);
+        form.reset();
+      } else {
+        alert("Error: " + (data?.message || "Unable to send message."));
+      }
+    } catch (error) {
+      alert("Something went wrong. Please try again.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,7 +68,7 @@ export default function Contact() {
           </p>
 
           {/* CONTACT INFO */}
-          <div className="space-y-6 text-[#e6dcc6]">
+          <div className="space-y-6 text-[#e6dcc6] selectable">
             <a
               href="tel:+2349133250794"
               className="flex items-center gap-4 hover:text-[#D4AF37]"
@@ -66,10 +94,11 @@ export default function Contact() {
           </div>
 
           {/* SOCIALS */}
-          <div className="mt-10 space-y-4 text-[#e6dcc6]">
+          <div className="mt-10 space-y-4 text-[#e6dcc6] selectable">
             <a
               href="https://www.instagram.com/ts_elite_events"
               target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-4 hover:text-[#D4AF37]"
             >
               <FaInstagram /> Instagram · @ts_elite_events
@@ -78,6 +107,7 @@ export default function Contact() {
             <a
               href="https://www.tiktok.com/@oluwatosinomotos7"
               target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-4 hover:text-[#D4AF37]"
             >
               <FaTiktok /> TikTok · @oluwatosinomotos7
@@ -86,6 +116,7 @@ export default function Contact() {
             <a
               href="https://www.facebook.com/share/14Rdg9SZBBE/"
               target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-4 hover:text-[#D4AF37]"
             >
               <FaFacebookF /> Facebook · T&S Elite Events
@@ -96,9 +127,24 @@ export default function Contact() {
         {/* FORM */}
         <div className="bg-[#0a0a0a] border border-[#D4AF37]/25 rounded-3xl p-10 shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
           <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-            <input name="name" required placeholder="Full name" className="lux-input" />
-            <input name="phone" placeholder="Phone number" className="lux-input" />
-            <input name="email" type="email" required placeholder="Email address" className="lux-input" />
+            <input
+              name="name"
+              required
+              placeholder="Full name"
+              className="lux-input"
+            />
+            <input
+              name="phone"
+              placeholder="Phone number"
+              className="lux-input"
+            />
+            <input
+              name="email"
+              type="email"
+              required
+              placeholder="Email address"
+              className="lux-input"
+            />
             <select name="event" className="lux-input">
               <option>Event type</option>
               <option>Wedding</option>
@@ -108,16 +154,26 @@ export default function Contact() {
               <option>Anniversary</option>
               <option>Corporate Event</option>
               <option>Graduation</option>
-
-              <option>Other</option>
+              <option>Baby Shower</option>
+              <option>Burial Ceremony</option>
+              <option>Others</option>
             </select>
-            <textarea name="message" rows="4" placeholder="Briefly describe your event" className="lux-input" />
+            <textarea
+              name="message"
+              rows="4"
+              placeholder="Briefly describe your event"
+              className="lux-input"
+            />
 
             <button
               type="submit"
-              className="w-full bg-[#D4AF37] hover:bg-[#c6a533] text-black py-4 rounded-xl font-medium transition"
+              className="w-full bg-[#D4AF37] hover:bg-[#c6a533] text-black py-4 rounded-xl font-medium transition disabled:opacity-60 flex items-center justify-center gap-2"
+              disabled={loading}
             >
-              Send Message
+              {loading && (
+                <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-black/40 border-t-black" />
+              )}
+              <span>{loading ? "Sending..." : "Send Message"}</span>
             </button>
           </form>
         </div>
