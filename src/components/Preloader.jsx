@@ -7,7 +7,7 @@ export default function Preloader({ onFinish }) {
     const t = setTimeout(() => {
       setLoading(false);
       if (onFinish) onFinish();
-    }, 5000); // total 5 seconds
+    }, 4000); // total 4 seconds
     return () => clearTimeout(t);
   }, [onFinish]);
 
@@ -17,14 +17,29 @@ export default function Preloader({ onFinish }) {
     <div
       className="fixed inset-0 flex items-center justify-center z-50"
       style={{
-        background: "linear-gradient(135deg, rgba(27,31,59,0.95), rgba(20,26,50,0.88))",
+        background: `
+          radial-gradient(circle at top, rgba(255,255,255,0.06), transparent 55%),
+          radial-gradient(circle at bottom, rgba(0,0,0,0.85), #000000 70%),
+          linear-gradient(145deg, #050505 0%, #050607 40%, #000000 100%)
+        `,
       }}
     >
       <div className="flex flex-col items-center gap-6 text-center scale-in">
-        <svg width="260" height="140" viewBox="0 0 260 140" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="260"
+          height="140"
+          viewBox="0 0 260 140"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <defs>
             <filter id="shadow2" x="-50%" y="-50%" width="200%" height="200%">
-              <feDropShadow dx="0" dy="12" stdDeviation="16" floodColor="#000" floodOpacity="0.25" />
+              <feDropShadow
+                dx="0"
+                dy="12"
+                stdDeviation="16"
+                floodColor="#000"
+                floodOpacity="0.25"
+              />
             </filter>
             <linearGradient id="goldGrad" x1="0" x2="1">
               <stop offset="0%" stopColor="#F7D88A" />
@@ -81,7 +96,10 @@ export default function Preloader({ onFinish }) {
 
         {/* Subtitle fades in after 4 seconds */}
         <div>
-          <h1 className="text-2xl font-display text-gold" style={{ letterSpacing: "1px" }}>
+          <h1
+            className="text-2xl font-display text-gold"
+            style={{ letterSpacing: "1px" }}
+          >
             T&S ELITE EVENTS
           </h1>
           <p
