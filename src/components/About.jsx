@@ -12,7 +12,7 @@ export default function About() {
         <p className="text-lg text-black/80 leading-relaxed max-w-3xl mx-auto">
           At <span className="text-[#D4AF37] font-semibold">T&amp;S Elite Events</span>, we curate refined celebrations for clients who value elegance,
           intention, and flawless execution. Rooted in Nigeria’s vibrant culture and elevated by global
-          luxury standards, we transform every event into a timeless experience.
+          luxury standards, we transform every events into a timeless experience.
         </p>
 
         {/* Divider */}

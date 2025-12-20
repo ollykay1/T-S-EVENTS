@@ -5,47 +5,47 @@ export default function Gallery() {
     {
       title: "Wedding Ceremonies",
       subtitle: "Elegant celebrations styled with timeless restraint",
-      images: ["/images/wedding1.jpg", "/images/wedding2.jpg", "/images/wedding3.jpg"],
+      images: ["../wc3.jpeg", "../wc1.jpeg", "../wc2.jpeg" , "../wc4.jpeg"  ],
     },
     {
       title: "Traditional Weddings",
       subtitle: "Culturally rooted ceremonies delivered with refined coordination",
-      images: ["/images/traditional1.jpg", "/images/traditional2.jpg", "/images/traditional3.jpg"],
+      images: ["../tw5.jpeg","../tw1.jpeg", "../tw2.jpeg", "../tw4.jpeg"],
     },
     {
       title: "Engagement & Introduction",
       subtitle: "Meaningful beginnings honoured with beauty and respect",
-      images: ["/images/engagement1.jpg", "/images/engagement2.jpg", "/images/engagement3.jpg"],
+      images: ["../en4.jpeg", "../en2.jpeg", "../en3.jfif", "../en5.jpeg", "../en1.jfif"],
     },
     {
       title: "Birthday Celebrations",
       subtitle: "Personal milestone moments styled to feel intimate and joyful",
-      images: ["/images/birthday1.jpg", "/images/birthday2.jpg", "/images/birthday3.jpg"],
+      images: ["../bd4.jfif", "../bd2.jfif", "../bd3.jfif" , "../bd1.jfif", "../bd5.jfif"],
     },
     {
       title: "Naming Ceremonies",
       subtitle: "Warm, family-centred gatherings handled with care",
-      images: ["/images/naming1.jpg", "/images/naming2.jpg", "/images/naming3.jpg"],
+      images: ["../nc1.jpg", "../nc2.jpg", "/images/naming3.jpg"],
     },
     {
       title: "Anniversary Celebrations",
       subtitle: "Years of love honoured in an atmosphere of quiet elegance",
-      images: ["/images/anniversary1.jpg", "/images/anniversary2.jpg", "/images/anniversary3.jpg"],
+      images: ["../ac1.jfif", "../ac2.jfif", "../ac3.jfif"],
     },
     {
       title: "Burial & Memorial Events",
       subtitle: "Dignified farewells coordinated with sensitivity and grace",
-      images: ["/images/burial1.jpg", "/images/burial2.jpg", "/images/burial3.jpg"],
+      images: ["../bm.jfif", "../bm2.jfif", "../bm3.jfif"],
     },
     {
       title: "Certifications & Accreditations",
       subtitle: "Professional certifications validating our event standards",
-      images: ["../images/cert1.pdf", "/images/4bg.avif", "/images/cert3.jpg"],
+      images: ["../ca1.png"],
     },
     {
       title: "Our Event Specialists",
       subtitle: "The planners, designers, and coordinators behind every detail",
-      images: ["/images/team1.jpg", "/images/team2.jpg", "/images/team3.jpg"],
+      images: ["../es1.jpeg"],
     },
   ];
 
@@ -173,11 +173,20 @@ export default function Gallery() {
           onClick={closeLightbox}
         >
           <div
-            className="bg-[#12141A] max-w-4xl w-full rounded-3xl p-8 border border-[#D6B46A]/30"
+            className="relative bg-[#12141A] max-w-4xl w-full rounded-3xl p-8 border border-[#D6B46A]/30"
             onClick={e => e.stopPropagation()}
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
           >
+            {/* X CLOSE BUTTON */}
+            <button
+              onClick={closeLightbox}
+              className="absolute right-4 top-4 h-9 w-9 rounded-full border border-[#D6B46A]/70 text-[#F5F0E6] flex items-center justify-center text-lg hover:bg-[#D6B46A] hover:text-black transition"
+              aria-label="Close"
+            >
+              ×
+            </button>
+
             <h3 className="text-3xl font-serif text-[#F5F0E6] mb-2 text-center">
               {galleryItems[activeIndex].title}
             </h3>
@@ -185,7 +194,8 @@ export default function Gallery() {
               {galleryItems[activeIndex].subtitle}
             </p>
 
-            <div className="relative h-72 rounded-2xl overflow-hidden">
+            {/* FIXED-SIZE MODAL BOX, IMAGE CROPS TO FILL (NO BLACK BARS) */}
+            <div className="relative h-80 md:h-[26rem] rounded-2xl overflow-hidden bg-black">
               <img
                 src={galleryItems[activeIndex].images[carouselIndex]}
                 alt=""
