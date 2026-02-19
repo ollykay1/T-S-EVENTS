@@ -133,9 +133,9 @@ export default function Footer() {
             </p>
             
             <div className="flex items-center gap-2 text-white/40 text-sm">
-              <span>Designed with</span>
+              <span>Design in</span>
               <span className="text-[#D4AF37]">♥</span>
-              <span>in Lagos, Nigeria</span>
+              <span> Nigeria</span>
             </div>
           </div>
         </div>

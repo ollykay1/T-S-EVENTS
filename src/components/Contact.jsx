@@ -197,7 +197,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <span className="text-xs text-white/50 uppercase tracking-wider">Location</span>
-                  <p className="font-semibold">Lagos, Nigeria</p>
+                  <p className="font-semibold">Nigeria</p>
                 </div>
               </div>
             </div>
