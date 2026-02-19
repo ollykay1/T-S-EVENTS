@@ -150,7 +150,7 @@ export default function Preloader() {
       {/* Bottom text */}
       <div className="absolute bottom-8 text-center">
         <p className="text-xs text-[#D4AF37]/40 tracking-[0.3em] uppercase">
-          Premium Event Planning • Lagos, Nigeria
+          Premium Event Planning • Nigeria
         </p>
       </div>
     </div>
